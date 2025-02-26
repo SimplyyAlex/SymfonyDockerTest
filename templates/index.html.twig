@@ -22,26 +22,28 @@
             <input type="submit" name="submit" value="Submit">
         </form>
     </div>
-    <table class="people-table">
-        <thead>
-        <tr>
-            <th>Person's ID</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for person in people %}
-        <tr>
-            <td><strong>{{ person.getId() }}</strong></td>
-            <td>{{ person.getName() }}</td>
-            <td>{{ person.getSurname() }}</td>
-            <td><p class="delete-text"><a href="{{ path('delete_person', {'id': person.getId()}) }}">Delete</p></td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="people-container">
+        <table class="people-table">
+            <thead>
+            <tr>
+                <th>Person's ID</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for person in people %}
+            <tr>
+                <td><strong>{{ person.getId() }}</strong></td>
+                <td>{{ person.getName() }}</td>
+                <td>{{ person.getSurname() }}</td>
+                <td><p class="delete-text"><a href="{{ path('delete_person', {'id': person.getId()}) }}">Delete</p></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>

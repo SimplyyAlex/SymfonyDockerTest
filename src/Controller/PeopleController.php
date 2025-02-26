@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PeopleController extends AbstractController
 {
-    #[Route('/index', name: 'index')]
+    #[Route('/', name: 'index')]
     public function index(Request $request, EntityManagerInterface $manager): Response
     {
         if ($request->isMethod('POST')) {

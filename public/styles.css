@@ -47,9 +47,14 @@ html, body {
         outline: 4px solid #0960ea;
 }
 
-.people-table {
+.people-container {
     grid-area: table;
-    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.people-table {
     width: 80%;
     border-collapse: collapse;
     color: #cccccc;
