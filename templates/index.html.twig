@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ asset('styles.css') }}">
+    <title>Add Person</title>
+</head>
+<body>
+<div class="container">
+    <div class="form-person">
+        <h1>Add Person</h1>
+        <form action="{{ path('index') }}" method="POST">
+            <label for="name">Name</label><br>
+            <input class="form-input" type="text" id="name" name="name" required><br>
+
+            <label for="surname">Surname</label><br>
+            <input class="form-input" type="text" id="surname" name="surname" required><br>
+
+            <input type="submit" name="submit" value="Submit">
+        </form>
+    </div>
+    <table class="people-table">
+        <thead>
+        <tr>
+            <th>Person's ID</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for person in people %}
+        <tr>
+            <td><strong>{{ person.getId() }}</strong></td>
+            <td>{{ person.getName() }}</td>
+            <td>{{ person.getSurname() }}</td>
+            <td><p class="delete-text"><a href="{{ path('delete_person', {'id': person.getId()}) }}">Delete</p></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+

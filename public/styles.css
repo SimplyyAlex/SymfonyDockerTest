@@ -1,0 +1,80 @@
+html, body {
+    min-height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #13131a;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 400px 1fr 400px;
+    grid-template-rows: 15em 5em auto;
+    grid-template-areas:
+        ". form ."
+        ". . ."
+        "table table table"
+}
+
+.form-person {
+    grid-area: form;
+    position: relative;
+    top: 2em;
+    padding: 2em;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.form-input {
+    border: 1px solid #000000;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: 100%;
+    transition: all 0.1s ease-in-out;
+}
+
+.form-input:hover {
+    border: none;
+    outline: 2px solid #0960ea;
+}
+
+.form-input:focus {
+        border: none;
+        outline: 4px solid #0960ea;
+}
+
+.people-table {
+    grid-area: table;
+    align-self: center;
+    width: 80%;
+    border-collapse: collapse;
+    color: #cccccc;
+}
+
+.people-table th, .people-table td {
+    padding: 10px;
+    text-align: left;
+}
+
+.people-table th {
+    border-bottom: 3px solid black;
+}
+
+.delete-text{
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.delete-text a {
+    color: white;
+}
+
+.delete-text a:hover {
+    color: red;
+    text-decoration: underline;
+    transition: all 0.1s ease-in-out;
+}
