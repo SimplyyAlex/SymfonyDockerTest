@@ -1,14 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{{ asset('styles.css') }}">
-    <title>Add Person</title>
-</head>
-<body>
+{% extends 'base.html.twig' %}
+
+{% block body %}
 <div class="container">
     <div class="form-person">
         <h1>Add Person</h1>
@@ -38,13 +30,11 @@
                 <td><strong>{{ person.getId() }}</strong></td>
                 <td>{{ person.getName() }}</td>
                 <td>{{ person.getSurname() }}</td>
-                <td><p class="delete-text"><a href="{{ path('delete_person', {'id': person.getId()}) }}">Delete</p></td>
+                <td><p class="delete-text"><a href="{{ path('delete_person', {'id': person.getId()}) }}">Delete</a></p></td>
             </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
-</body>
-</html>
-
+{% endblock %}

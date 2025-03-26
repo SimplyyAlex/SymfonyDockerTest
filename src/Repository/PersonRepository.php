@@ -16,6 +16,27 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, Person::class);
     }
 
+    public function findSection(?int $minId, ?int $maxId, ?int $limit)
+    {
+        $query = $this->createQueryBuilder('p');
+
+        if ($limit != null) {
+            $query->setMaxResults($limit);
+        }
+
+        if ($minId != null) {
+            $query->andWhere('p.id >= :minId');
+            $query->setParameter('minId', $minId);
+        }
+
+        if ($maxId != null) {
+            $query->andWhere('p.id <= :maxId');
+            $query->setParameter('maxId', $maxId);
+        }
+
+        return $query->getQuery()->getResult();
+    }
+
     //    /**
     //     * @return Person[] Returns an array of Person objects
     //     */
