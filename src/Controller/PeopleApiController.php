@@ -9,8 +9,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 final class PeopleApiController extends AbstractController
 {
+    #[Route('/api/people', name: 'post_people_api', methods: ['POST'])]
+    public function postPerson(Request $request, EntityManagerInterface $manager, SerializerInterface $serializer, ValidatorInterface $validator): Response
+    {
+        $person = $serializer->deserialize($request->getContent(), Person::class, 'json');
+
+        $errors = $validator->validate($person);
+        if (count($errors) > 0) {
+            return new Response("Invalid input", Response::HTTP_BAD_REQUEST);
+        }
+
+        $manager->persist($person);
+        $manager->flush();
+        return $this->json($person, Response::HTTP_CREATED);
+    }
+
     #[Route('/api/people/{id?}', name: 'get_people_api', methods: ['GET'])]
     public function getPerson(EntityManagerInterface $manager, Request $request, ?int $id): Response
     {

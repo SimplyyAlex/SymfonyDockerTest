@@ -1,40 +1,42 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles.css') }}">
+{% endblock %}
+
 {% block body %}
-<div class="container">
-    <div class="form-person">
-        <h1>Add Person</h1>
-        <form action="{{ path('index') }}" method="POST">
-            <label for="name">Name</label><br>
-            <input class="form-input" type="text" id="name" name="name" required><br>
+    <div class="container">
+        <div class="form-person">
+            <h1>Add Person</h1>
+            <form action="{{ path('index') }}" method="POST">
+                <label for="name">Name</label><br>
+                <input class="form-input" type="text" id="name" name="name" required><br>
 
-            <label for="surname">Surname</label><br>
-            <input class="form-input" type="text" id="surname" name="surname" required><br>
+                <label for="surname">Surname</label><br>
+                <input class="form-input" type="text" id="surname" name="surname" required><br>
 
-            <input type="submit" name="submit" value="Submit">
-        </form>
+                <input class="form-submit" type="submit" name="submit" value="Submit">
+            </form>
+        </div>
+        <div class="people-container">
+            <table class="people-table">
+                <thead>
+                <tr>
+                    <th>Person's ID</th>
+                    <th>Name</th>
+                    <th>Surname</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for person in people %}
+                    <tr>
+                        <td><strong>{{ person.getId() }}</strong></td>
+                        <td>{{ person.getName() }}</td>
+                        <td>{{ person.getSurname() }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="people-container">
-        <table class="people-table">
-            <thead>
-            <tr>
-                <th>Person's ID</th>
-                <th>Name</th>
-                <th>Surname</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for person in people %}
-            <tr>
-                <td><strong>{{ person.getId() }}</strong></td>
-                <td>{{ person.getName() }}</td>
-                <td>{{ person.getSurname() }}</td>
-                <td><p class="delete-text"><a href="{{ path('delete_person', {'id': person.getId()}) }}">Delete</a></p></td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
 {% endblock %}
