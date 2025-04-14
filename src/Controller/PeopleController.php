@@ -32,9 +32,83 @@ class PeopleController extends AbstractController
         }
 
         $people = $serializer->deserialize($response->getContent(), 'App\Entity\Person[]', 'json');
+        usort($people, function (Person $a, Person $b) {
+            return $a->getId() <=> $b->getId();
+        });
 
         return $this->render('index.html.twig', [
             'people' => $people,
         ]);
+    }
+
+    #[Route('/add', name: 'add', methods: ['GET'])]
+    public function addPerson(): Response
+    {
+        return $this->render('add.html.twig');
+    }
+
+    #[Route('/add', name: 'add_request', methods: ['POST'])]
+    public function addPersonRequest(Request $request, HttpClientInterface $httpClient): Response
+    {
+        $api = "https://localhost:443/api/people";
+
+        $name = $request->request->get('name');
+        $surname = $request->request->get('surname');
+
+        try {
+            $response = $httpClient->request('POST', $api, [
+                'verify_peer' => false,
+                'verify_host' => false,
+                'headers' => ['Content-Type' => 'application/json'],
+                'json' => ['name' => $name, 'surname' => $surname]
+            ]);
+
+            if ($response->getStatusCode() !== Response::HTTP_CREATED) {
+                dd($response->getContent() . $response->getStatusCode());
+            }
+        } catch (\Exception $e) {
+            dd("Fetching exception");
+        }
+
+        return $this->redirectToRoute('index');
+    }
+
+    #[Route('/delete', name: 'delete', methods: ['GET'])]
+    public function delete(): Response
+    {
+        return $this->render('delete.html.twig', []);
+    }
+
+    #[Route('/delete', name: 'delete_request', methods: ['POST'])]
+    public function deleteRequest(Request $request, HttpClientInterface $httpClient): Response
+    {
+        $id = $request->request->get('id');
+        if (!$id) {
+            dd("Failed ID");
+        }
+
+        return $this->executeDelete($id, $httpClient, 'delete');
+    }
+
+    #[Route('/delete/{id}', name: 'delete_get', methods: ['GET'])]
+    public function deleteFromGet(int $id, HttpClientInterface $httpClient): Response
+    {
+        return $this->executeDelete($id, $httpClient, 'index');
+    }
+
+    private function executeDelete(int $id, HttpClientInterface $httpClient, string $routeToRedirect): Response
+    {
+        $api = "https://localhost:443/api/people/$id";
+        try {
+            $response = $httpClient->request('DELETE', $api, ['verify_peer' => false, 'verify_host' => false]);
+
+            if ($response->getStatusCode() !== Response::HTTP_NO_CONTENT) {
+                dd("Failed HTTP response code");
+            }
+
+        } catch (\Exception $e) {
+            dd("Fetching exception");
+        }
+        return $this->redirectToRoute($routeToRedirect);
     }
 }
