@@ -1,40 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('styles.css') }}">
-{% endblock %}
-
 {% block body %}
-    <div class="container">
-        <div class="form-person">
-            <h1>Add Person</h1>
-            <form action="{{ path('index') }}" method="POST">
-                <label for="name">Name</label><br>
-                <input class="form-input" type="text" id="name" name="name" required><br>
+    <nav class="bg-white shadow-md px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Brand / Title -->
+            <div>
+                <a href="/" class="text-2xl font-bold text-gray-800 hover:underline" >People</a>
+            </div>
 
-                <label for="surname">Surname</label><br>
-                <input class="form-input" type="text" id="surname" name="surname" required><br>
-
-                <input class="form-submit" type="submit" name="submit" value="Submit">
-            </form>
+            <!-- Navigation Links -->
+            <div class="w-40 flex flex-row justify-between">
+                <a href="/add" class="text-gray-600 hover:text-blue-600 hover:font-bold transition text-lg">Add</a>
+                <a href="/delete" class="text-gray-600 hover:text-red-600 hover:font-bold transition text-xl">Delete</a>
+            </div>
         </div>
-        <div class="people-container">
-            <table class="people-table">
-                <thead>
+    </nav>
+    <div class="max-w-7xl mt-10 mx-auto px-6 py-8">
+        <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+            <table class="min-w-full text-left border-collapse">
+                <thead class="bg-gray-100 border-b">
                 <tr>
-                    <th>Person's ID</th>
-                    <th>Name</th>
-                    <th>Surname</th>
+                    <th class="px-6 py-3 text-sm font-semibold text-gray-600">ID</th>
+                    <th class="px-6 py-3 text-sm font-semibold text-gray-600">Name</th>
+                    <th class="px-6 py-3 text-sm font-semibold text-gray-600">Surname</th>
+                    <th class="px-6 py-3 text-sm font-semibold text-gray-600"></th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y">
                 {% for person in people %}
-                    <tr>
-                        <td><strong>{{ person.getId() }}</strong></td>
-                        <td>{{ person.getName() }}</td>
-                        <td>{{ person.getSurname() }}</td>
-                    </tr>
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-6 py-4 text-sm text-gray-800">{{ person.id }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-800">{{ person.name }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-800">{{ person.surname }}</td>
+                    <td class="px-6 py-4 flex justify-end gap-2">
+                        <a href="/edit/{{ person.id }}" class="inline-block px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition">Edit</a>
+                        <a href="/delete/{{ person.id }}" class="inline-block px-4 py-2 text-sm text-white bg-red-500 hover:bg-red-600 rounded-lg transition">Delete</a>
+                    </td>
+                </tr>
                 {% endfor %}
+
                 </tbody>
             </table>
         </div>

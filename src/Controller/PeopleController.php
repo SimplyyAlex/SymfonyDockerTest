@@ -21,28 +21,6 @@ class PeopleController extends AbstractController
     {
         $api = "https://localhost:443/api/people";
 
-        if ($request->isMethod('POST')) {
-            $name = $request->request->get('name');
-            $surname = $request->request->get('surname');
-
-            try {
-                $response = $httpClient->request('POST', $api, [
-                    'verify_peer' => false,
-                    'verify_host' => false,
-                    'headers' => ['Content-Type' => 'application/json'],
-                    'json' => ['name' => $name, 'surname' => $surname]
-                ]);
-
-                if ($response->getStatusCode() !== Response::HTTP_CREATED) {
-                    dd($response->getContent() . $response->getStatusCode());
-                }
-            } catch (\Exception $e) {
-                dd("Fetching exception");
-            }
-
-            return $this->redirectToRoute('index');
-        }
-
         try {
             $response = $httpClient->request('GET', $api, ['verify_peer' => false, 'verify_host' => false]);
 

@@ -25,6 +25,17 @@ final class DeleteController extends AbstractController{
             dd("Failed ID");
         }
 
+        return $this->executeDelete($id, $httpClient, 'delete');
+    }
+
+    #[Route('/delete/{id}', name: 'delete_get', methods: ['GET'])]
+    public function deleteFromGet(int $id, HttpClientInterface $httpClient): Response
+    {
+        return $this->executeDelete($id, $httpClient, 'index');
+    }
+
+    private function executeDelete(int $id, HttpClientInterface $httpClient, string $routeToRedirect): Response
+    {
         $api = "https://localhost:443/api/people/$id";
         try {
             $response = $httpClient->request('DELETE', $api, ['verify_peer' => false, 'verify_host' => false]);
@@ -35,7 +46,7 @@ final class DeleteController extends AbstractController{
 
         } catch (\Exception $e) {
             dd("Fetching exception");
-    }
-        return $this->redirectToRoute('error');
+        }
+        return $this->redirectToRoute($routeToRedirect);
     }
 }

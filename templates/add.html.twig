@@ -15,19 +15,28 @@
     </nav>
     <div class="w-screen h-screen flex items-center justify-center bg-gray-200">
         <div class="w-full max-w-sm bg-gray-800 rounded-2xl p-6 shadow-xl">
-            <form method="POST" action="{{ path('delete_request') }}" class="flex flex-col gap-4">
-                <label for="id" class="text-sm font-medium text-gray-300">Insert person ID:</label>
+            <form method="POST" action="{{ path('add') }}" class="flex flex-col gap-4">
+                <label for="name" class="text-sm font-medium text-gray-300">Jméno:</label>
                 <input
-                    id="id"
-                    name="id"
+                    id="name"
+                    name="name"
                     type="text"
                     class="w-full h-11 px-4 text-gray-900 rounded-lg bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                 >
+
+                <label for="surname" class="text-sm font-medium text-gray-300">Příjmení:</label>
+                <input
+                    id="surname"
+                    name="surname"
+                    type="text"
+                    class="w-full h-11 px-4 text-gray-900 rounded-lg bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                >
+
                 <button
                     type="submit"
-                    class="w-full h-11 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition"
+                    class="w-full h-11 mt-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition"
                 >
-                    Delete
+                    Add
                 </button>
             </form>
         </div>
