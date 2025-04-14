@@ -74,7 +74,7 @@ class PeopleController extends AbstractController
     }
 
     #[Route('/delete', name: 'delete', methods: ['GET'])]
-    public function delete(): Response
+    public function delete(?string $status): Response
     {
         return $this->render('delete.html.twig', []);
     }
@@ -86,7 +86,7 @@ class PeopleController extends AbstractController
         if (!$id) {
             dd("Failed ID");
         }
-
+        $id = (int) $id;
         return $this->executeDelete($id, $httpClient, 'delete');
     }
 
@@ -103,12 +103,21 @@ class PeopleController extends AbstractController
             $response = $httpClient->request('DELETE', $api, ['verify_peer' => false, 'verify_host' => false]);
 
             if ($response->getStatusCode() !== Response::HTTP_NO_CONTENT) {
-                dd("Failed HTTP response code");
+                return $this->redirectToRoute($routeToRedirect, [
+                    'status' => 'error',
+                    'message' => 'Sorry, there was an error while processing your request.',
+                ]);
             }
 
         } catch (\Exception $e) {
-            dd("Fetching exception");
+            return $this->redirectToRoute($routeToRedirect, [
+                'status' => 'error',
+                'message' => 'Sorry, there was an error while processing your request.',
+            ]);
         }
-        return $this->redirectToRoute($routeToRedirect);
+        return $this->redirectToRoute($routeToRedirect, [
+            'status' => 'success',
+            'message' => 'The person with id ' . $id . ' has been deleted.'
+        ]);
     }
 }
