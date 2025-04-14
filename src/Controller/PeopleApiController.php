@@ -21,7 +21,7 @@ final class PeopleApiController extends AbstractController
 
         $errors = $validator->validate($person);
         if (count($errors) > 0) {
-            return new Response("Invalid input", Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => "Invalid input"], Response::HTTP_BAD_REQUEST);
         }
 
         $manager->persist($person);
@@ -62,5 +62,27 @@ final class PeopleApiController extends AbstractController
         $manager->remove($person);
         $manager->flush();
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+    }
+
+    #[Route('/api/people/{id}', name: 'put_people_api', methods: ['PUT'])]
+    public function putPerson(int $id, Request $request, EntityManagerInterface $manager, SerializerInterface $serializer, ValidatorInterface $validator): Response
+    {
+        $repository = $manager->getRepository(Person::class);
+        $existingPerson = $repository->find($id);
+        if ($existingPerson === null) {
+            return new JsonResponse(['error' => 'Person not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $newPerson = $serializer->deserialize($request->getContent(), Person::class, 'json');
+        $errors = $validator->validate($newPerson);
+        if (count($errors) > 0) {
+            return new JsonResponse(['error' => "Invalid input"], Response::HTTP_BAD_REQUEST);
+        }
+
+        $existingPerson->setName($newPerson->getName());
+        $existingPerson->setSurname($newPerson->getSurname());
+
+        $manager->flush();
+        return $this->json($existingPerson, Response::HTTP_OK);
     }
 }
