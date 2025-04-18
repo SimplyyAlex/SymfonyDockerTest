@@ -14,6 +14,8 @@ services:
             SYMFONY_VERSION: ${SYMFONY_VERSION:-}
             STABILITY: ${STABILITY:-stable}
         volumes:
+            - .:/var/www/html
+            - ./var/log:/var/www/html/var/log
             - caddy_data:/data
             - caddy_config:/config
         ports:

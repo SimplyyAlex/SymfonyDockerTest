@@ -26,6 +26,20 @@
             </div>
         </div>
     </nav>
+    {% set status = app.flashes('status')|first %}
+    {% set message = app.flashes('message')|first %}
+
+    {% if status and message %}
+        {% if status == 'success' %}
+            <div class="fixed bottom-0 inset-x-0 p-4 text-green-800 border-t border-green-300 bg-green-50 text-center z-50">
+                {{ message }}
+            </div>
+        {% elseif status == 'error'  %}
+            <div class="fixed bottom-0 inset-x-0 p-4 text-red-800 border-t border-red-300 bg-red-50 text-center z-50">
+                {{ message }}
+            </div>
+        {% endif %}
+    {% endif %}
     {% block body %}{% endblock %}
     </body>
 </html>

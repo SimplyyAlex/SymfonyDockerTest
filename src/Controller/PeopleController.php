@@ -64,13 +64,19 @@ class PeopleController extends AbstractController
             ]);
 
             if ($response->getStatusCode() !== Response::HTTP_CREATED) {
-                dd($response->getContent() . $response->getStatusCode());
+                $this->addFlash('status', 'error');
+                $this->addFlash('message', $response->getStatusCode() .  ' Sorry, there was an error while processing your request.' );
+                return $this->redirectToRoute('add');
             }
         } catch (\Exception $e) {
-            dd("Fetching exception");
+            $this->addFlash('status', 'error');
+            $this->addFlash('message', 'Sorry, there was an error while processing your request.' );
+            return $this->redirectToRoute('add');
         }
 
-        return $this->redirectToRoute('index');
+        $this->addFlash('status', 'success');
+        $this->addFlash('message', 'The person was successfully added.' );
+        return $this->redirectToRoute('add');
     }
 
     #[Route('/delete', name: 'delete', methods: ['GET'])]
@@ -84,7 +90,9 @@ class PeopleController extends AbstractController
     {
         $id = $request->request->get('id');
         if (!$id) {
-            dd("Failed ID");
+            $this->addFlash('status', 'error');
+            $this->addFlash('message', 'Sorry, there was an error while processing your request.' );
+            $this->redirectToRoute('delete');
         }
         $id = (int) $id;
         return $this->executeDelete($id, $httpClient, 'delete');
@@ -103,21 +111,57 @@ class PeopleController extends AbstractController
             $response = $httpClient->request('DELETE', $api, ['verify_peer' => false, 'verify_host' => false]);
 
             if ($response->getStatusCode() !== Response::HTTP_NO_CONTENT) {
-                return $this->redirectToRoute($routeToRedirect, [
-                    'status' => 'error',
-                    'message' => 'Sorry, there was an error while processing your request.',
-                ]);
+                $this->addFlash('status', 'error');
+                $this->addFlash('message', $response->getStatusCode() .  ' Sorry, there was an error while processing your request.' );
+                return $this->redirectToRoute($routeToRedirect);
             }
 
         } catch (\Exception $e) {
-            return $this->redirectToRoute($routeToRedirect, [
-                'status' => 'error',
-                'message' => 'Sorry, there was an error while processing your request.',
-            ]);
+            $this->addFlash('status', 'error');
+            $this->addFlash('message', $response->getStatusCode() .  ' Sorry, there was an error while processing your request.' );
+            return $this->redirectToRoute($routeToRedirect);
         }
-        return $this->redirectToRoute($routeToRedirect, [
-            'status' => 'success',
-            'message' => 'The person with id ' . $id . ' has been deleted.'
+        $this->addFlash('status', 'success');
+        $this->addFlash('message', 'The person with id ' . $id . ' was successfully deleted.' );
+        return $this->redirectToRoute($routeToRedirect);
+    }
+
+    #[Route('/edit/{id}', name: 'edit', defaults: ['id' => null], methods: ['GET'])]
+    public function editPerson(?int $id): Response
+    {
+        return $this->render('edit.html.twig', [
+            'id' => $id,
         ]);
+    }
+
+    #[Route('/edit', name: 'edit_request', methods: ['POST'])]
+    public function editPersonRequest(Request $request, HttpClientInterface $httpClient): Response
+    {
+        $id = $request->request->get('id');
+        $name = $request->request->get('name');
+        $surname = $request->request->get('surname');
+
+        $api = "https://localhost:443/api/people/$id";
+
+        try {
+            $response = $httpClient->request('PUT', $api, [
+                'verify_peer' => false,
+                'verify_host' => false,
+                'headers' => ['Content-Type' => 'application/json'],
+                'json' => ['name' => $name, 'surname' => $surname]
+            ]);
+
+            if ($response->getStatusCode() !== Response::HTTP_OK) {
+                $this->addFlash('status', 'error');
+                $this->addFlash('message', $response->getStatusCode() .  ' Sorry, there was an error while processing your request.' );
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('status', 'error');
+            $this->addFlash('message', 'Sorry, there was an error while processing your request.' );
+        }
+
+        $this->addFlash('status', 'success');
+        $this->addFlash('message', 'The person with id ' . $id . ' was successfully edited.' );
+        return $this->redirectToRoute('edit');
     }
 }

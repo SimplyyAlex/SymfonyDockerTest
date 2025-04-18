@@ -20,15 +20,4 @@
             </form>
         </div>
     </div>
-    {% if app.request.get('status') %}
-        {% if app.request.get('status') == 'success' %}
-            <div class="fixed bottom-0 inset-x-0 p-4 text-green-800 border-t border-green-300 bg-green-50 text-center z-50">
-                {{ app.request.get('message') }}
-            </div>
-        {% elseif app.request.get('status') == 'error'  %}
-            <div class="fixed bottom-0 inset-x-0 p-4 text-red-800 border-t border-red-300 bg-red-50 text-center z-50">
-                {{ app.request.get('message') }}
-            </div>
-        {% endif %}
-    {% endif %}
 {% endblock %}
