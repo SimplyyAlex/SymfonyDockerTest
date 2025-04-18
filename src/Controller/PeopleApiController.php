@@ -40,6 +40,7 @@ final class PeopleApiController extends AbstractController
                 type: 'object'
             )
         ),
+        tags: ['People'],
         responses: [
             new OA\Response(
                 response: 201,
@@ -84,6 +85,7 @@ final class PeopleApiController extends AbstractController
     #[OA\Get(
         description: 'Returns a list of people from the database. You can filter results using optional query parameters: limit, min_id, max_id.',
         summary: 'Retrieves a list of people',
+        tags: ['People'],
         parameters: [
             new OA\Parameter(
                 name: 'limit',
@@ -152,6 +154,7 @@ final class PeopleApiController extends AbstractController
     #[OA\Get(
         description: 'Returns a record of one person specified by id.',
         summary: 'Retrieves one person',
+        tags: ['People'],
         parameters: [
             new OA\Parameter(
                 name: 'id',
@@ -202,6 +205,7 @@ final class PeopleApiController extends AbstractController
     #[OA\Delete(
         description: 'Deletes a person from the database using their ID.',
         summary: 'Deletes a person by ID',
+        tags: ['People'],
         parameters: [
             new OA\Parameter(
                 name: 'id',
@@ -251,6 +255,7 @@ final class PeopleApiController extends AbstractController
                 type: 'object'
             )
         ),
+        tags: ['People'],
         parameters: [
             new OA\Parameter(
                 name: 'id',
